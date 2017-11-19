@@ -1,0 +1,28 @@
+@charset "utf-8";
+
+body {
+	margin: 0;
+}
+
+#cont {
+	margin: 20px;
+}
+
+canvas {
+	margin-right: 20px;
+}
+.graph, .gauge {
+	display: inline-block;
+}
+.graph canvas {
+	border: 1px solid black;
+}
+h3 {
+	margin: 0 0 1em 0;
+}
+
+footer, header {
+	width: 100%;
+	padding: 12px 0 12px 12px;
+	background: lightgreen;
+}
