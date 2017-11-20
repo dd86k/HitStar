@@ -66,7 +66,6 @@ function Graph(node) {
 	this._height = node.height;
 	//this._c.textAlign = "center";
 	//this._c.font = "20px monospace";
-	// UPDATE: Find a way to do a nice ratio with values and max
 }
 Graph.prototype = {
 	max: 100,
@@ -95,8 +94,9 @@ Graph.prototype = {
 		this._c.moveTo(this._width, this.yvalues[--l]);
 		this._c.beginPath();
 		for (var x = this._width; l > 0; x -= this._xbump, --l) {
-			var p = h - ((h - lw) * this.yvalues[l] / this.max);
-			this._c.lineTo(x, p);
+			this._c.lineTo(x,
+				h - ((h - lw) * this.yvalues[l] / this.max)
+			);
 			this._c.stroke();
 		}
 		this._c.closePath();
