@@ -4,14 +4,15 @@
  * Makes a new Graph, a chart-like object.
  * @param {HTMLCanvasElement} node 
  */
-function Graph(node) {
-	this._c = node.getContext("2d");
+function Graph(node, color) {
 	this._width = node.width;
 	this._height = node.height;
 	this.vals = [];
 	this.max = 100;
 	this._xmax = 35;
 	this._xbump = 10;
+	this._c = node.getContext("2d");
+	this._c.strokeStyle = color;
 	//this._c.textAlign = "center";
 	//this._c.font = "20px monospace";
 }
@@ -20,9 +21,7 @@ Graph.prototype = {
 		this.vals.push(v);
 		//TODO: Calculate with WIDTH and XBUMP to remove items instead
 		if (this.vals.length > this._xmax)
-		//problematic?
-			this.vals.shift();
-			//this.values = this.values.slice(1); //values[1..$]
+			this.vals.shift(); // like v[1..$]
 		this.update();
 	},
 	update: function() {
@@ -84,8 +83,8 @@ function cpu() {
 	r.send();
 }
 
-graph_cpu.graph = new Graph(graph_cpu);
-graph_mem.graph = new Graph(graph_mem);
+graph_cpu.graph = new Graph(graph_cpu, 'blue');
+graph_mem.graph = new Graph(graph_mem, 'purple');
 cpu();
 mem();
 setInterval(mem, 1500);

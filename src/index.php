@@ -1,8 +1,9 @@
 <?php
+require_once 'utils.php';
 const VERSION = "0.0.0";
 const BRANCH = 'debug';
 const PROJECT_RELEASE = 'HitStar '.VERSION.'-'.BRANCH;
-const _RELEASE = 0;
+const _RELEASE = FALSE;
 
 ?><!DOCTYPE html>
 <html>
@@ -14,7 +15,7 @@ const _RELEASE = 0;
 	<meta charset="utf-8"/>
 </head>
 <body>
-	<nav>
+	<nav id="mainnav">
 		<span>HitStar</span>
 	<ul>
 		<li><a href="#">Dashboard</a></li>
@@ -32,16 +33,27 @@ const _RELEASE = 0;
 	<div id="main">
 		<div class="graph">
 			<h3>CPU usage</h3>
-			<div class="s">
-				<span>placeholder</span>
-				<span>placeholder</span>
+			<div class="ss">
+				<span>Usage percentage</span>
+				<span>100%</span>
 			</div>
 			<canvas id="graph_cpu" width="300" height="180"></canvas>
-			<scan>placeholder</scan>
+			<div class="ss">
+				<span>???</span>
+				<span>0</span>
+			</div>
 		</div>
 		<div class="graph">
 			<h3>Used memory</h3>
+			<div class="ss">
+				<span>Memory usage</span>
+				<span><?=get_max_mem_formatted();?></span>
+			</div>
 			<canvas id="graph_mem" width="300" height="180"></canvas>
+			<div class="ss">
+				<span>???</span>
+				<span>0</span>
+			</div>
 		</div>
 
 		<h2>Uname</h2>
