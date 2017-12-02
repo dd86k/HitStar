@@ -2,38 +2,28 @@
 const WINDOWS = 'WINNT';
 const LINUX = 'Linux';
 
-function generate_error($code, $desc) {
+function error($code, $desc) {
 	return json_encode([
 		'err' => $code,
 		'msg' => $desc
 	]);
 }
 
+header('Content-Type: application/json');
 switch ($_GET['t']) { // Type
-case 'cmdline':
-    switch (PHP_OS) {
-    case WINDOWS:
-        //http_response_code();
-        break;
-    case LINUX:
-        echo @file_get_contents('/proc/cmdline');
-        break;
-	}
-	break;
 case 'cpu':
-    header('Content-Type: application/json');
 	switch (PHP_OS) {
     case WINDOWS:
-        //http_response_code();
+		echo error(1, 'Not implemented');
+		//wmic cpu get LoadPercentage
         break;
     case LINUX:
         if (is_readable('/proc/stat')) {
-			//TODO: Fix when SUPER busy >200% (fucking why)
 			$line = @file_get_contents('/proc/stat');
 			$v = explode(' ', $line);
             $load0 = ($v[1]) + ($v[2]) + ($v[3]);
-            sleep(1);
-            //usleep(500000); // Doesn't work, unless *2 $avg
+            sleep(1); // A jiffy is 1/100th of a second
+            //usleep(500000); // Doesn't work, unless $sys*2 (but less accurate)
 			$line = @file_get_contents('/proc/stat');
 			$v = explode(' ', $line);
 			$load1 = ($v[1]) + ($v[2]) + ($v[3]);
@@ -42,21 +32,18 @@ case 'cpu':
 			$corecount = // Cheap but works
 				count(preg_split('/cpu/', $line, -1, PREG_SPLIT_NO_EMPTY)) - 1;
 
-			$o = [
-				'sys' => $sys, // "Raw", deprecated
+			echo json_encode([
+				'sys' => $sys, // "Raw"
 				'cpucount' => $corecount,
 				'avg' => round($sys / $corecount, 2, PHP_ROUND_HALF_UP)
-			];
-
-            echo json_encode($o);
-        } else echo generate_error(1, '/proc/stat is unreadable');
+			]);
+        } else echo error(1, '/proc/stat is unreadable');
     	break;
     }
 	break;
 case 'mem':
-    header('Content-Type: application/json');
     switch (PHP_OS) {
-	case 'WINNT':
+	case WINDOWS:
 		// Get total physical memory (this is in bytes)
 		$cmd = "wmic ComputerSystem get TotalPhysicalMemory";
 		@exec($cmd, $outputTotalPhysicalMemory);
@@ -84,7 +71,7 @@ case 'mem':
 			}
 		}
 	break;
-	case 'Linux':
+	case LINUX:
 		/*if (is_readable("/proc/meminfo")) {
 			$stats = @file_get_contents("/proc/meminfo");
 
@@ -112,12 +99,11 @@ case 'mem':
 		$err = 0;
 		@exec('free -b', $out, $err);
 		$line = preg_split('/ /', $out[1], -1, PREG_SPLIT_NO_EMPTY);
-        $arr = [
+        echo json_encode([
             'total' => $line[1],
             'used'  => $line[2],
             'free'  => $line[6]
-        ];
-		echo json_encode($arr);
+        ]);
 		break;
     }
     break;
