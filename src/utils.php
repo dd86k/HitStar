@@ -2,7 +2,7 @@
 
 function _format($s) {
 	if ($s >= 1073741824)
-		return number_format($s/1073741824,2).'G';
+		return number_format($s/1073741824,1).'G';
 	if ($s >= 1048576)
 		return floor($s/1048576).'M';
 	if ($s >= 1024)

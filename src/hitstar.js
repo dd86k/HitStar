@@ -1,25 +1,31 @@
 "use strict";
 
 /**
- * Makes a new Graph, a chart-like object.
- * @param {HTMLCanvasElement} node 
+ * Construct a new 2D Graph.
+ * @param {HTMLCanvasElement} node Node
+ * @param {Color} color Line color
  */
 function Graph(node, color) {
 	this._width = node.width;
 	this._height = node.height;
 	this.vals = [];
 	this.max = 100;
-	this._xmax = 35;
 	this._xbump = 10;
+	this._xmax = (this._width / this._xbump) + 1;
 	this._c = node.getContext("2d");
 	this._c.strokeStyle = color;
 	//this._c.textAlign = "center";
 	//this._c.font = "20px monospace";
 }
 Graph.prototype = {
+	/**
+	 * Push a value in stack (graph) and update graph.
+	 * @param {Number} v Value
+	 */
 	push: function(v) {
+		//TODO: Move the scaling part for the Y axis value here (from update())
+		//      so that update() don't have to do the dirty work
 		this.vals.push(v);
-		//TODO: Calculate with WIDTH and XBUMP to remove items instead
 		if (this.vals.length > this._xmax)
 			this.vals.shift(); // like v[1..$]
 		this.update();
@@ -35,7 +41,7 @@ Graph.prototype = {
 		this._c.beginPath();
 		for (var x = this._width; l >= 0; x -= this._xbump, --l) {
 			this._c.lineTo(x,
-				h - ((h - lw) * this.vals[l] / this.max)
+				h - ((h - lw) * this.vals[l] / this.max) // Scale Y
 			);
 			this._c.stroke();
 		}
@@ -59,33 +65,34 @@ function _format(s) {
 	return s + 'B';
 }
 
-function mem() {
+function request_api(s, f) {
 	var r = new XMLHttpRequest();
 	r.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			var j = JSON.parse(r.responseText);
-			graph_mem.graph.max = j.total;
-			graph_mem.graph.push(j.used);
+		if (r.readyState == 4 && r.status == 200) {
+			f(JSON.parse(r.responseText));
 		}
-	};
-	r.open("GET", "api.php?t=mem");
+	}
+	r.open("GET", "api.php?t="+s);
 	r.send();
 }
-function cpu() {
-	var r = new XMLHttpRequest();
-	r.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			var j = JSON.parse(r.responseText);
-			graph_cpu.graph.push(j.avg);
-		}
-	};
-	r.open("GET", "api.php?t=cpu");
-	r.send();
+
+function refresh_cpu() {
+	request_api('cpu', function(j) {
+		graph_cpu.graph.push(j.avg);
+		span_cpu_used.innerText = j.avg+'%';
+	});
+}
+function refresh_mem() {
+	request_api('mem', function(j) {
+		graph_mem.graph.max = j.total;
+		graph_mem.graph.push(j.used);
+		span_mem_used.innerText = _format(j.used);
+	});
 }
 
 graph_cpu.graph = new Graph(graph_cpu, 'blue');
 graph_mem.graph = new Graph(graph_mem, 'purple');
-cpu();
-mem();
-setInterval(mem, 1500);
-setInterval(cpu, 1500);
+refresh_cpu();
+refresh_mem();
+setInterval(refresh_mem, 1500);
+setInterval(refresh_cpu, 1500);

@@ -4,10 +4,9 @@ const VERSION = "0.0.0";
 const BRANCH = 'debug';
 const PROJECT_RELEASE = 'HitStar '.VERSION.'-'.BRANCH;
 const _RELEASE = FALSE;
-
 ?><!DOCTYPE html>
 <html>
-	<head>
+<head>
 	<title><?= PROJECT_RELEASE ?></title>
 	<link rel="stylesheet" type="text/css" href="hitstar<?php
 		if (_RELEASE) echo '.min';
@@ -15,7 +14,7 @@ const _RELEASE = FALSE;
 	<meta charset="utf-8"/>
 </head>
 <body>
-	<nav id="mainnav">
+	<nav>
 		<span>HitStar</span>
 	<ul>
 		<li><a href="#">Dashboard</a></li>
@@ -39,8 +38,8 @@ const _RELEASE = FALSE;
 			</div>
 			<canvas id="graph_cpu" width="300" height="180"></canvas>
 			<div class="ss">
-				<span>???</span>
-				<span>0</span>
+				<span>? seconds</span>
+				<span id="span_cpu_used">0%</span>
 			</div>
 		</div>
 		<div class="graph">
@@ -51,15 +50,15 @@ const _RELEASE = FALSE;
 			</div>
 			<canvas id="graph_mem" width="300" height="180"></canvas>
 			<div class="ss">
-				<span>???</span>
-				<span>0</span>
+				<span>? seconds</span>
+				<span id="span_mem_used">0B</span>
 			</div>
 		</div>
 
 		<h2>Uname</h2>
 		<div><?= php_uname() ?></div>
 
-<?php // Extra ..
+<?php // Extras
 		switch (PHP_OS) {
 		case 'Linux':
 			echo '<h2>Boot command</h2>';
