@@ -1,11 +1,12 @@
-# dboard, a simple dashboard
-
-dboard is a simple WebUI dashboard, providing system metrics regarding the system's performance.
+# HitStar
 
 
+
+## Is this thing ready to test out?
+Nope, sorry.
 
 ## Supported operating systems
 - Linux
 
 ## Additional disclaimer
-dboard is, in any means, not production-ready.
+HitStar is, in any means, not production-ready.

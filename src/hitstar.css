@@ -1,0 +1,70 @@
+@charset "utf-8";
+
+body {
+	margin: 0;
+	font-family: "Segoe UI", sans-serif
+}
+
+#main {
+	margin: 20px;
+}
+
+/* Menu */
+
+nav {
+	width: 100%;
+	background: lightgreen;
+}
+nav span {
+	margin: 0 .8em;
+	font-size: 1.3em;
+}
+nav a {
+	line-height: 3em;
+	padding: .8em;
+	text-decoration: none;
+	color: #111;
+}
+nav ul {
+	list-style:none;
+	margin:0;
+	padding:0;
+}
+nav>ul>li, nav>ul {
+	display: inline-block;
+}
+nav ul ul {
+	display: none;
+	background: lightgreen;
+}
+nav ul li:hover {
+	background: #B0FEB0;
+}
+nav ul li:hover > ul {
+	display: block;
+	position: fixed;
+}
+
+/* Stuff */
+
+h3 {
+	margin: 0 0 .5em 0;
+}
+canvas {
+	margin-right: 20px;
+}
+.graph, .gauge {
+	display: inline-block;
+}
+.graph canvas {
+	border: 1px solid black;
+}
+.graph p {
+	margin: 0;
+}
+
+footer {
+	width: 100%;
+	padding: 12px 0 12px 12px;
+	background: lightgreen;
+}
