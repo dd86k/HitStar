@@ -76,27 +76,6 @@ function request_api(s, f) {
 	r.send();
 }
 
-function refresh_cpu() {
-	request_api('cpu', function(j) {
-		graph_cpu.graph.push(j.avg);
-		span_cpu_used.innerText = j.avg+'%';
-	});
-}
-function refresh_mem() {
-	request_api('mem', function(j) {
-		graph_mem.graph.max = j.total;
-		graph_mem.graph.push(j.used);
-		span_mem_used.innerText = _format(j.used);
-	});
-}
-
-graph_cpu.graph = new Graph(graph_cpu, 'blue');
-graph_mem.graph = new Graph(graph_mem, 'purple');
-refresh_cpu();
-refresh_mem();
-setInterval(refresh_mem, 1500);
-setInterval(refresh_cpu, 1500);
-
 /**
  * Load a page dynamically.
  * @param {String} s Page
@@ -119,6 +98,7 @@ function load_page(s) {
 }
 function request_page(s) {
 	//TODO: Place loading animation
+	//history.pushState(
 	load_page(s);
 }
 
