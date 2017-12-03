@@ -35,7 +35,7 @@ case 'cpu':
 			echo json_encode([
 				'sys' => $sys, // "Raw"
 				'cpucount' => $corecount,
-				'avg' => round($sys / $corecount, 2, PHP_ROUND_HALF_UP)
+				'avg' => number_format($sys / $corecount, 2)
 			]);
         } else echo error(1, '/proc/stat is unreadable');
     	break;

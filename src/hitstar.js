@@ -19,12 +19,12 @@ function Graph(node, color) {
 }
 Graph.prototype = {
 	/**
-	 * Push a value in stack (graph) and update graph.
+	 * Push a value in stack and update graph.
 	 * @param {Number} v Value
 	 */
 	push: function(v) {
 		//TODO: Move the scaling part for the Y axis value here (from update())
-		//      so that update() don't have to do the dirty work
+		//      so that update() don't have to do the dirty work.
 		this.vals.push(v);
 		if (this.vals.length > this._xmax)
 			this.vals.shift(); // like v[1..$]
@@ -33,15 +33,15 @@ Graph.prototype = {
 	update: function() {
 		this._clear();
 		var l = this.vals.length;
-		if (l <= 2) return;
+		if (l <= 1) return;
 		var lw = this._c.lineWidth;
 		var h = this._height;
 
 		this._c.moveTo(this._width, this.vals[--l]);
 		this._c.beginPath();
-		for (var x = this._width; l >= 0; x -= this._xbump, --l) {
+		for (var x = this._width; l >= 0; x -= this._xbump) {
 			this._c.lineTo(x,
-				h - ((h - lw) * this.vals[l] / this.max) // Scale Y
+				h - ((h - lw) * this.vals[l--] / this.max) // Scale Y
 			);
 			this._c.stroke();
 		}
@@ -96,3 +96,37 @@ refresh_cpu();
 refresh_mem();
 setInterval(refresh_mem, 1500);
 setInterval(refresh_cpu, 1500);
+
+/**
+ * Load a page dynamically.
+ * @param {String} s Page
+ */
+function load_page(s) {
+	var r = new XMLHttpRequest();
+	r.onreadystatechange = function() {
+		switch (r.readyState) {
+		case 4:
+			switch (r.status) {
+			case 200:
+				main.innerHTML = r.responseText;
+				break;
+			}
+			break;
+		}
+	}
+	r.open("GET", 'pages/'+s+'.php');
+	r.send();
+}
+function request_page(s) {
+	//TODO: Place loading animation
+	load_page(s);
+}
+
+mainnav.onclick = function (e) {
+	e = e ||  window.event;
+	var a = e.target || e.srcElement;
+	if (a.tagName == 'A') {
+		request_page(a.getAttribute('href'));
+		return false; // prevent default action and stop event propagation
+	}
+}

@@ -18,7 +18,7 @@ nav {
 nav span {
 	margin: 0 .8em;
 	font-size: 1.5em;
-	vertical-align: middle;
+	vertical-align: sub;
 }
 nav a {
 	line-height: 3em;
