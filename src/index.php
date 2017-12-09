@@ -1,7 +1,6 @@
 <?php
 const VERSION = "0.0.0";
-const BRANCH = 'debug';
-const PROJECT_RELEASE = 'HitStar '.VERSION.'-'.BRANCH;
+const PROJECT_RELEASE = 'HitStar '.VERSION;
 const _RELEASE = FALSE;
 ?><!DOCTYPE html>
 <html>

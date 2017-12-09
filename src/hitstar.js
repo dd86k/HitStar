@@ -23,9 +23,10 @@ Graph.prototype = {
 	 * @param {Number} v Value
 	 */
 	push: function(v) {
-		//TODO: Move the scaling part for the Y axis value here (from update())
-		//      so that update() don't have to do the dirty work.
-		this.vals.push(v);
+		this.vals.push(
+			// Scale Y here
+			this._height - ((this._height - this._c.lineWidth) * v / this.max)
+		);
 		if (this.vals.length > this._xmax)
 			this.vals.shift(); // like v[1..$]
 		this.update();
@@ -34,15 +35,11 @@ Graph.prototype = {
 		this._clear();
 		var l = this.vals.length;
 		if (l <= 1) return;
-		var lw = this._c.lineWidth;
-		var h = this._height;
 
 		this._c.moveTo(this._width, this.vals[--l]);
 		this._c.beginPath();
 		for (var x = this._width; l >= 0; x -= this._xbump) {
-			this._c.lineTo(x,
-				h - ((h - lw) * this.vals[l--] / this.max) // Scale Y
-			);
+			this._c.lineTo(x, this.vals[l--]); // Scale Y
 			this._c.stroke();
 		}
 		this._c.closePath();
@@ -54,13 +51,13 @@ Graph.prototype = {
 
 function _format(s) {
 	const KB = 1024;
-	const MB = 1024 * 1024;
-	const GB = 1024 * 1024 * 1024;
-	if (s > GB)
+	const MB = KB * 1024;
+	const GB = MB * 1024;
+	if (s > GB) // GB
 		return (s/GB).toFixed(1) + 'G';
-	if (s > MB)
+	if (s > MB) // MB
 		return Math.floor(s/MB) + 'M';
-	if (s > KB)
+	if (s > KB) // KB
 		return Math.floor(s/KB) + 'K';
 	return s + 'B';
 }
@@ -103,10 +100,10 @@ function request_page(s) {
 }
 
 mainnav.onclick = function (e) {
-	e = e ||  window.event;
+	e = e || window.event;
 	var a = e.target || e.srcElement;
 	if (a.tagName == 'A') {
 		request_page(a.getAttribute('href'));
-		return false; // prevent default action and stop event propagation
+		return false;
 	}
 }
