@@ -77,7 +77,7 @@ function request_api(s, f) {
  * Load a page dynamically.
  * @param {String} s Page
  */
-function load_page(s) {
+/*function load_page(s) {
 	var r = new XMLHttpRequest();
 	r.onreadystatechange = function() {
 		switch (r.readyState) {
@@ -106,4 +106,4 @@ mainnav.onclick = function (e) {
 		request_page(a.getAttribute('href'));
 		return false;
 	}
-}
+}*/

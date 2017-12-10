@@ -15,17 +15,17 @@ const _RELEASE = FALSE;
 	<nav id="mainnav">
 		<span>HitStar</span>
 	<ul>
-		<li><a href="dash">Dashboard</a></li>
-		<li><a href="">Asterisk</a>
+		<li><a href="?p=dash">Dashboard</a></li>
+		<li><a href="?p=a">Asterisk</a>
 		<ul>
-			<li><a href="">Sub Menu 1</a></li>
+			<li><a href="?p=a_peers">Peers</a></li>
 			<li><a href="">Sub Menu 2</a></li>
 			<li><a href="">Sub Menu 3</a></li>
 			<li><a href="">Sub Menu 4</a></li>
 			<li><a href="">Sub Menu 5</a></li>
 		</ul>
 		</li>
-		<li><a href="test">Test123</a>
+		<li><a href="?p=test">Test123</a>
 	</ul></nav>
 
 	<script src="hitstar<?php
@@ -33,7 +33,16 @@ const _RELEASE = FALSE;
 	?>.js"></script>
 
 	<div id="main">
-		<?php require_once 'pages/dash.php' ?>
+<?php if (isset($_GET['p'])) {
+	$p = 'pages/'.$_GET['p'].'.php';
+	if (file_exists($p)) {
+		include_once $p;
+	} else {
+		include_once 'pages/404.php';
+	}
+} else {
+	include_once 'pages/dash.php';
+}?>
 	</div>
 
 	<footer>
